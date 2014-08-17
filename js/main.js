@@ -4,13 +4,14 @@ $(document).ready(function(){
     var constellationTime = 0;
 
     $('#submit').click(function(){
-        var node = parseInt(document.getElementById('nodeCount').value);
+        var node = parseInt($('#nodeCount').val());
 
         if (node > 20) {
             alert(" Too big!");
             return false;
         }
 
+        $('table tr:gt(0)').remove();
         network = draw(node);
     });
 
@@ -45,7 +46,13 @@ $(document).ready(function(){
             edges: edges
         };
         var options = {};
-        return new vis.Network(container, data, options);
+        var network =  new vis.Network(container, data, options);
+
+        for (keys in network.nodes) {
+            var degree = network.nodes[keys].edges.length;
+            $('table tr:last').after('<tr><td>' + keys + '</td> <td>'+ degree + '</td></tr>')
+        }
+        return network;
     }
 
     function constellation(network) {
