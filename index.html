@@ -2,8 +2,10 @@
 <html>
 <head>
   <title>Network | Basic usage</title>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
   <script src="../dist/vis.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="js/main.js"></script>
   <style>
     #mynetwork {
       width: 600px;
@@ -15,96 +17,12 @@
 
 <body>
 
-<label for="nodeCount">Node number</label>
-<input type="text" id="nodeCount" placeholder="Must less than 20"/>
-<button id="submit">GO</button>
-<button id="constellation">discover</button>
+    <label for="nodeCount">Node number</label>
+    <input type="text" id="nodeCount" placeholder="Must less than 20"/>
+    <button id="submit">GO</button>
+    <button id="constellation">discover</button>
 
-<div id="mynetwork"></div>
-
-<script>
-    var network;
-    var targetNodes = [];
-    var constellationTime = 0;
-
-    document.getElementById('submit').addEventListener('click', function() {
-        var node = parseInt(document.getElementById('nodeCount').value);
-
-        if (node > 20) {
-            alert(" Too big!");
-            return false;
-        }
-
-        network = draw(node);
-    }, false);
-
-    document.getElementById('constellation').addEventListener('click', function() {
-        constellation(network);
-    }, false);
-
-    function draw(nodeNum) {
-        var nodes = [];
-        var edges = [];
-
-        for (var i = 1; i <= nodeNum; i++) {
-            nodes.push({
-                id: i,
-                label: String(i)
-            });
-
-            for (var j = i+1; j <= nodeNum; j++) {
-                if (Math.random() < 0.5) {
-                    edges.push({
-                        from: i,
-                        to: j
-                    });
-                }
-            }
-        }
-
-        // create a network
-        var container = document.getElementById('mynetwork');
-        var data = {
-            nodes: nodes,
-            edges: edges
-        };
-        var options = {};
-        return new vis.Network(container, data, options);
-    }
-
-    function constellation(network) {
-        //while (network.getSelection().nodes.length != network.nodeIndices.length) {
-            var maxDegree = 0;
-            var maxKey = 0;
-            var nodePool = network.nodes;
-
-            for (keys in nodePool) {
-                if (network.nodes[keys].selected) {
-                    continue;
-                }
-
-                var degree = network.nodes[keys].edges.length;
-                if (degree > maxDegree) {
-                    maxDegree = degree;
-                    maxKey = keys;
-                }
-
-                //if (constellationTime > 0) {
-                //    nodePool = [];
-                //    console.log(network.nodes[maxKey]);
-                //    for (keys in network.nodes[maxKey].edges) {
-                //        nodePool.push(network.nodes[maxKey].edges[keys].toId);
-                //    }
-                //}
-
-            }
-
-            targetNodes.push(maxKey);
-            network.selectNodes(targetNodes);
-            constellationTime += 1;
-        //}
-    }
-</script>
+    <div id="mynetwork"></div>
 
 </body>
 </html>
