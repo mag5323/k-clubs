@@ -1,9 +1,13 @@
 $(document).ready(function(){
     var network;
-    var targetNodes = [];
-    var constellationTime = 0;
+    var targetNodes;
+    var degrees;
+    var nodeNeighbors;
 
     $('#submit').click(function(){
+        $('table tr:gt(0)').remove();
+        $('#message').empty();
+
         var node = parseInt($('#nodeCount').val());
 
         if (node > 20) {
@@ -11,7 +15,6 @@ $(document).ready(function(){
             return false;
         }
 
-        $('table tr:gt(0)').remove();
         network = draw(node);
     });
 
@@ -22,6 +25,9 @@ $(document).ready(function(){
     function draw(nodeNum) {
         var nodes = [];
         var edges = [];
+        targetNodes = [];
+        degrees = [];
+        nodeNeighbors = [];
 
         for (var i = 1; i <= nodeNum; i++) {
             nodes.push({
@@ -49,7 +55,8 @@ $(document).ready(function(){
         var network =  new vis.Network(container, data, options);
 
         for (keys in network.nodes) {
-            var degree = network.nodes[keys].edges.length;
+            var degree = network.nodes[keys].dynamicEdgesLength;
+            degrees.push(degree);
             $('table tr:last').after('<tr><td>' + keys + '</td> <td>'+ degree + '</td></tr>')
         }
         return network;
@@ -61,19 +68,34 @@ $(document).ready(function(){
         var nodePool = network.nodes;
 
         for (keys in nodePool) {
-            if (network.nodes[keys].selected) {
+            if (nodePool[keys].selected) {
                 continue;
             }
 
-            var degree = network.nodes[keys].edges.length;
-            if (degree > maxDegree) {
-                maxDegree = degree;
+            var neighbors = [];
+            if (degrees[keys-1] > maxDegree) {
+                maxDegree = degrees[keys-1];
                 maxKey = keys;
             }
+
+            for (edgeKeys in nodePool[keys].edges) {
+                var node = nodePool[keys].edges[edgeKeys];
+                if (parseInt(keys) === node.toId) {
+                    neighbors.push(node.fromId);
+                } else{
+                    neighbors.push(node.toId);
+                }
+            }
+            nodeNeighbors.push(neighbors);
         }
 
+        if (0 === maxKey) {
+            $('#message').text('All nodes have been discovered.');
+            return false;
+        }
+
+        console.log(nodeNeighbors[maxKey-1]);
         targetNodes.push(maxKey);
         network.selectNodes(targetNodes);
-        constellationTime += 1;
     }
 });
