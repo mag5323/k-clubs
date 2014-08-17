@@ -1,28 +1,39 @@
 <!doctype html>
 <html>
-<head>
-  <title>Network | Basic usage</title>
-  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-  <script src="../dist/vis.js"></script>
-  <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="js/main.js"></script>
-  <style>
-    #mynetwork {
-      width: 600px;
-      height: 600px;
-      border: 1px solid lightgray;
-    }
-  </style>
-</head>
+    <head>
+        <title>Network | Basic usage</title>
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+        <script src="../dist/vis.js"></script>
+        <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script src="js/main.js"></script>
+        <style>
+            #mynetwork {
+                height: 500px;
+                border: 1px solid lightgray;
+            }
+
+            .navbar-right {
+                padding-right: 30px;
+            }
+        </style>
+    </head>
 
 <body>
 
-    <label for="nodeCount">Node number</label>
-    <input type="text" id="nodeCount" placeholder="Must less than 20"/>
-    <button id="submit">GO</button>
-    <button id="constellation">discover</button>
+    <div class="container">
+        <nav class="navbar navbar-default" role="navigation">
+            <a class="navbar-brand" href="/~mag5323/vis/mag">Constellation</a>
+            <form class="navbar-form navbar-right">
+                <div class="form-group">
+                    <input type="text" id="nodeCount" class="form-control" placeholder="Node Number"/>
+                </div>
+                <button type="button" class="btn btn-default" id="submit">Generate</button>
+                <button type="button" class="btn btn-link" id="constellation">discover</button>
+            </form>
+        </nav>
 
-    <div id="mynetwork"></div>
+        <div id="mynetwork"></div>
+    </div>
 
 </body>
 </html>
